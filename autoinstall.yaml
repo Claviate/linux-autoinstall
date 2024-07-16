@@ -2,8 +2,8 @@ autoinstall:
   version: 1
 
   early-commands:
-    - Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové.
-    - Starting installation now"
+    - $echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
+    - $echo "Starting installation now"
   interactive-sections:
     - identity
 #  source:
