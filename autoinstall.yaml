@@ -10,7 +10,7 @@ autoinstall:
  interactive-sections:
  - identity
  source:
- id: ubuntu-desktop-minimal
+  id: ubuntu-desktop-minimal
 
  locale: en_US.UTF-8
  keyboard:
