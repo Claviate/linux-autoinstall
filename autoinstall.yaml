@@ -1,49 +1,49 @@
-#cloud-config
 autoinstall:
- version: 1
+  version: 1
 
- early-commands:
-  - echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
-  - sleep 2
-  - echo "Starting installation now"
+  early-commands:
+    - echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
+    - sleep 2
+    - echo "Starting installation now"
 
- interactive-sections:
- - identity
- source:
-  id: ubuntu-desktop-minimal
+  interactive-sections:
+    - identity
+    - storage
+  source:
+    id: ubuntu-desktop-minimal
 
- locale: en_US.UTF-8
- keyboard:
-  layout: dk
-  variant: ''
- timezone: Europe/Copenhagen
+  locale: en_US.UTF-8
+  keyboard:
+    layout: dk
+    variant: ''
+  timezone: Europe/Copenhagen
 
  #refresh-installer:
  # update: true
 
- packages:
-  - git
-  - python3-pip
-  - libreoffice
+  packages:
+    - git
+    - python3-pip
+    - libreoffice
 
- snaps:
-  - name: slack
-    channel: stable
-    classic: true
+  snaps:
+    - name: slack
+      channel: stable
+      classic: true
 
-  - name: code
-    channel: stable
-    classic: true
+    - name: code
+      channel: stable
+      classic: true
 
-  - name: postman
-    channel: stable
-    classic: true
+    - name: postman
+      channel: stable
+      classic: true
 
- storage:
-  name: zfs
+  #storage:
+  #  name: zfs
             
- late-commands:
-   - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
+  late-commands:
+    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
 #  - curtin in-target -- apt-get update
 #  - curtin in-target -- apt-get install ca-certificates curl
 #  - curtin in-target -- install -m 0755 -d /etc/apt/keyrings
