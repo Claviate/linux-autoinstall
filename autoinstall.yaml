@@ -21,6 +21,15 @@ autoinstall:
  #refresh-installer:
  # update: true
 
+network:
+  version: 2
+  ethernets:
+    all-eth:
+      match:
+        name: "en*"
+      dhcp6: yes
+debconf-selections: eek
+
   packages:
     - git
     - python3-pip
