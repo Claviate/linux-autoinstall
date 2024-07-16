@@ -2,17 +2,14 @@ autoinstall:
   version: 1
 
   early-commands:
-    - echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
-    - sleep 2
-    - echo "Starting installation now"
-
+    - Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové.
+    - Starting installation now"
   interactive-sections:
     - identity
     - storage
-  source:
-    id: ubuntu-desktop-minimal
+#  source:
+#    id: ubuntu-desktop-minimal
 
-  locale: en_US.UTF-8
   keyboard:
     layout: dk
     variant: ''
@@ -20,15 +17,6 @@ autoinstall:
 
  #refresh-installer:
  # update: true
-
-network:
-  version: 2
-  ethernets:
-    all-eth:
-      match:
-        name: "en*"
-      dhcp6: yes
-debconf-selections: eek
 
   packages:
     - git
@@ -48,8 +36,12 @@ debconf-selections: eek
       channel: stable
       classic: true
 
+  storage:
+    layout:
+        name: lvm
   #storage:
-  #  name: zfs
+  #  layout:
+  #    name: zfs
             
 #  late-commands:
 #    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
