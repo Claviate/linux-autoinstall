@@ -6,7 +6,6 @@ autoinstall:
     - Starting installation now"
   interactive-sections:
     - identity
-    - storage
 #  source:
 #    id: ubuntu-desktop-minimal
 
