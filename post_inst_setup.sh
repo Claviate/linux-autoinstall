@@ -28,7 +28,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock dock-position 'BOTTOM'
 gsettings set org.gnome.shell.extensions.dash-to-dock panel-mode false
 gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size 60
 gsettings set org.gnome.shell.extensions.dash-to-dock multi-monitor true
-gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox_firefox.desktop', 'slack_slack.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'postman_postman.desktop', 'snap-store_snap-store.desktop', 'org.gnome.Settings.desktop']"
+gsettings set org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop', 'firefox_firefox.desktop', 'slack_slack.desktop', 'org.gnome.Terminal.desktop', 'code.desktop', 'postman_postman.desktop', 'keepassxc_keepassxc.desktop', 'snap-store_snap-store.desktop', 'org.gnome.Settings.desktop']"
 
 
 #vlc as default video player
@@ -37,11 +37,9 @@ for type in video/x-msvideo video/mp4 video/mpeg video/x-matroska video/quicktim
 done
 
 #vscode as default for relevant file extensions
-xdg-mime default code.desktop text/x-python
-xdg-mime default code.desktop application/json
-xdg-mime default code.desktop text/html
-xdg-mime default code.desktop text/plain
-
+fpr type in text/x-python application/json text/html text/plain
+  xdg-mime default code.desktop $type
+done
 
 #Setup docker
 # Add Docker's official GPG key:
@@ -56,7 +54,7 @@ echo \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-
+# Post-installation setup
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 sudo groupadd docker
 sudo usermod -aG docker $USER
