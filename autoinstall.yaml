@@ -85,6 +85,7 @@ autoinstall:
         pool: rpool
         mountpoint: /
         name: ROOT
+        volume: rpool/ROOT  # Adding volume argument
 
   user-data:
     chpasswd:
