@@ -5,12 +5,7 @@ autoinstall:
     - echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
   interactive-sections:
     - identity
-#  source:
-#    id: ubuntu-desktop-minimal
 
-  keyboard:
-    layout: dk
-    variant: ''
   timezone: Europe/Copenhagen
 
  #refresh-installer:
@@ -18,6 +13,7 @@ autoinstall:
 
   packages:
     - git
+    - python3-full
     - python3-pip
     - libreoffice
 
@@ -34,23 +30,66 @@ autoinstall:
       channel: stable
       classic: true
 
-  storage:
-    layout:
-        name: lvm
-  #storage:
-  #  layout:
-  #    name: zfs
-            
-#  late-commands:
-#    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
-#  - curtin in-target -- apt-get update
-#  - curtin in-target -- apt-get install ca-certificates curl
-#  - curtin in-target -- install -m 0755 -d /etc/apt/keyrings
-#  - curtin in-target -- curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-#  - curtin in-target -- chmod a+r /etc/apt/keyrings/docker.asc
-#  - curtin in-target -- echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-#    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \ tee /etc/apt/sources.list.d/docker.list > /dev/null
-#  - curtin in-target -- apt-get update
-#  - curtin in-target -- apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin    
+    - name: vlc
+      channel: stable
+      classic: true
+    
+    - name: keepassxc
+      channel: stable
+      classic: true
 
+  storage:
+    config:
+      - type: disk
+        id: disk0
+        ptable: gpt
+        path: /dev/nvme0n1
+        wipe: superblock-recursive
+        preserve: false
+        grub_device: true
+      - type: partition
+        id: partition0
+        device: disk0
+        size: 512M
+        flag: boot
+      - type: partition
+        id: partition1
+        device: disk0
+        size: -1
+      - type: format
+        id: format0
+        device: partition0
+        fstype: fat32
+        label: ESP
+      - type: encryption
+        id: luks1
+        device: partition1
+        key: "prompt"
+      - type: format
+        id: format1
+        device: luks1
+        fstype: zfs
+        label: rpool
+      - type: mount
+        path: /boot/efi
+        device: format0
+      - type: zpool
+        id: zpool0
+        name: rpool
+        cachefile: none
+        mountpoint: legacy
+        devices:
+          - luks1
+      - type: zfs_dataset
+        id: root
+        pool: rpool
+        mountpoint: /
+        name: ROOT
+
+  user-data:
+    chpasswd:
+      expire: False
+         
+  late-commands:
+    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
 # shutdown: reboot
