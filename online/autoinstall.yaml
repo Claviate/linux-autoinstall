@@ -40,5 +40,5 @@ autoinstall:
       classic: true
          
   late-commands:
-    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
+    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/main/online/post_inst_setup.sh -o ~/post_inst_setup.sh
 # shutdown: reboot
