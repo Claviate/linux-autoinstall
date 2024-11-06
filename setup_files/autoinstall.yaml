@@ -1,0 +1,47 @@
+autoinstall:
+  version: 1
+
+  early-commands:
+    - echo "Will now run automatic setup of Ubuntu for Claviate desktops. Authored on 15-07-2024 by Thomas Bové."
+  interactive-sections:
+    - timezone
+    - keyboard
+    - identity
+    - network
+    - storage
+
+  refresh-installer:
+    update: true
+
+  packages:
+    - git
+    - python3-full
+    - python3-pip
+    - libreoffice
+
+  snaps:
+    - name: slack
+      channel: stable
+      classic: true
+
+    - name: code
+      channel: stable
+      classic: true
+
+    - name: postman
+      channel: stable
+      classic: true
+
+    - name: vlc
+      channel: stable
+      classic: true
+    
+    - name: keepassxc
+      channel: stable
+      classic: true
+         
+  late-commands:
+  - curtin in-target --target=/target -- cp /cdrom/post_inst_setup.sh /root/
+  - curtin in-target --target=/target -- chmod +x /root/post_inst_setup.sh
+
+  shutdown: reboot
