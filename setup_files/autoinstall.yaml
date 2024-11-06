@@ -2,15 +2,16 @@ autoinstall:
   version: 1
 
   early-commands:
-    - echo "Will now run automatic setup of Ubuntu for Claviate desktops with danish keyboard. Authored on 15-07-2024 by Thomas Bové."
+    - echo "Will now run automatic setup of Ubuntu for Claviate desktops. Authored on 15-07-2024 by Thomas Bové."
   interactive-sections:
+    - timezone
+    - keyboard
     - identity
+    - network
     - storage
 
-  timezone: Europe/Copenhagen
-
- #refresh-installer:
- # update: true
+  refresh-installer:
+    update: true
 
   packages:
     - git
@@ -40,5 +41,7 @@ autoinstall:
       classic: true
          
   late-commands:
-    - curtin in-target -- curl -fsSL https://raw.githubusercontent.com/Claviate/linux-autoinstall/dev/post_inst_setup.sh -o ~/post_inst_setup.sh
-# shutdown: reboot
+  - curtin in-target --target=/target -- cp /cdrom/post_inst_setup.sh /root/
+  - curtin in-target --target=/target -- chmod +x /root/post_inst_setup.sh
+
+  shutdown: reboot
