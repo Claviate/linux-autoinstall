@@ -1,0 +1,127 @@
+autoinstall:
+  version: 1
+
+  early-commands:
+    - echo "Will now run automatic setup of Ubuntu for Claviate desktops. Authored on 15-07-2024 by Thomas Bové."
+  interactive-sections:
+    - timezone
+    - keyboard
+    - identity
+    - network
+    - storage
+
+  refresh-installer:
+    update: true
+
+  packages:
+    - git
+    - python3-full
+    - python3-pip
+    - libreoffice
+         
+  late-commands:
+  - curtin in-target --target=/target -- cp /cdrom/post_inst_setup.sh /root/
+  - curtin in-target --target=/target -- chmod +x /root/post_inst_setup.sh
+
+  shutdown: reboot
+
+
+storage:
+    config:
+      - id: disk0
+        name: disk0
+        type: disk
+        ptable: gpt
+        preserve: true
+        grub_device: false
+        match:
+          ssd: true
+      - id: esp
+        type: partition
+        device: disk0
+        size: 1G
+        flag: boot
+        number: 1
+        wipe: superblock
+        grub_device: true
+        # preserve: true #(uncomment and remove 'wipe' to keep data)
+      - id: esp-format
+        type: format
+        fstype: fat32
+        volume: esp
+        # preserve: true
+      - id: boot
+        type: partition
+        device: disk0
+        size: 2G
+        number: 2
+        # preserve: true
+      - id: boot-format
+        type: format
+        fstype: ext4
+        volume: boot
+        # preserve: true
+      - id: root
+        type: partition
+        device: disk0
+        size: 80G
+        wipe: superblock
+        number: 3
+        # preserve: true
+      - id: vgroot
+        type: lvm_volgroup
+        name: vgroot
+        devices: [root]
+      - id: lvroot
+        type: lvm_partition
+        name: lvroot
+        volgroup: vgroot
+        wipe: superblock
+        size: 20G
+      - id: luroot
+        type: dm_crypt
+        dm_name: luroot
+        volume: lvroot
+        key: cl4viat#
+      - id: luroot-format
+        type: format
+        fstype: ext4
+        volume: luroot
+      - id: pool_part
+        type: partition
+        device: disk0
+        size: -1
+        number: 4
+      - id: pool
+        type: zpool
+        pool: pool
+        vdevs: [pool_part]
+        mountpoint: /pool
+        pool_properties:
+          version: null
+          ashift: 12
+          autotrim: "on"
+        fs_properties:
+          acltype: posixacl
+          xattr: sa
+          compression: lz4
+          normalization: formD
+          relatime: "on"
+      - id: luroot-mount
+        type: mount
+        device: luroot-format
+        path: /
+      - id: boot-mount
+        type: mount
+        device: boot-format
+        path: /boot
+      - id: esp-mount
+        type: mount
+        device: esp-format
+        path: /boot/efi
+      - id: home
+        type: zfs
+        pool: pool
+        volume: home
+        properties:
+          mountpoint: /home

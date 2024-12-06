@@ -1,0 +1,4 @@
+autoinstall:
+  # Replace the current autoinstall configuration with one provided by a trusted server
+  early-commands:
+    - wget -O /autoinstall.yaml https://raw.githubusercontent.com/Claviate/linux-autoinstall/main/online/autoinstall_UW.yaml
